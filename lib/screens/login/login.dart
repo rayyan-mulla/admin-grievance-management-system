@@ -1,4 +1,6 @@
+import 'package:admin_grievance_management_system/screens/login/user_session.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -53,7 +55,7 @@ class _LoginState extends State<Login> {
                     if (value.isEmpty) {
                       return 'Please enter your email address';
                     }
-                    return null; // Return null for no validation error
+                    return null;
                   },
                 ),
                 SizedBox(height: 20.0),
@@ -81,7 +83,7 @@ class _LoginState extends State<Login> {
                     if (value.isEmpty) {
                       return 'Please enter your password';
                     }
-                    return null; // Return null for no validation error
+                    return null;
                   },
                 ),
                 SizedBox(height: 20.0),
@@ -94,10 +96,14 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        // Valid form, perform login logic here
                         if (_emailController.text == 'admin@gmail.com' &&
                             _passwordController.text == 'admin@123') {
-                          print('Admin Login Successful');
+                          Provider.of<UserSession>(context, listen: false)
+                              .setLoggedIn(true);
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => Home(),
+                          ));
                         } else {
                           print('Invalid credentials');
                         }
