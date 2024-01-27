@@ -1,3 +1,4 @@
+import 'package:admin_grievance_management_system/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -88,15 +89,6 @@ class FilterSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text("Filter and Search"),
-    );
-  }
-}
-
-class Profile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Admin Profile"),
     );
   }
 }
