@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "956077684925",
+    "firebase_url": "https://grievancemanagementsyste-6a70a-default-rtdb.firebaseio.com",
+    "project_id": "grievancemanagementsyste-6a70a",
+    "storage_bucket": "grievancemanagementsyste-6a70a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956077684925:android:79943873356c1957af1fd4",
+        "android_client_info": {
+          "package_name": "com.example.admin_grievance_management_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2uSn1wGzEWAlYAavUOk_CQkR5jXeXCzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956077684925:android:9227e81d26e5d760af1fd4",
+        "android_client_info": {
+          "package_name": "com.example.grievance_management_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2uSn1wGzEWAlYAavUOk_CQkR5jXeXCzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

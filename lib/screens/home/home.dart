@@ -1,4 +1,5 @@
 import 'package:admin_grievance_management_system/screens/profile/profile.dart';
+import 'package:admin_grievance_management_system/screens/stats/quick_stats.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -62,15 +63,6 @@ class _HomeState extends State<Home> {
           },
         ),
       ),
-    );
-  }
-}
-
-class QuickStats extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Quick Stats"),
     );
   }
 }
