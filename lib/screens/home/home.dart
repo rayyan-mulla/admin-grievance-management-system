@@ -1,3 +1,4 @@
+import 'package:admin_grievance_management_system/screens/grievance/filter_and_search_grievances.dart';
 import 'package:admin_grievance_management_system/screens/profile/profile.dart';
 import 'package:admin_grievance_management_system/screens/stats/quick_stats.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class _HomeState extends State<Home> {
   final tabs = [
     QuickStats(),
     UpdateGrievanceStatus(),
-    FilterSearch(),
+    FilterAndSearchGrievances(),
     Profile(),
   ];
 
@@ -72,15 +73,6 @@ class UpdateGrievanceStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text("Update Grievance Status"),
-    );
-  }
-}
-
-class FilterSearch extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Filter and Search"),
     );
   }
 }
