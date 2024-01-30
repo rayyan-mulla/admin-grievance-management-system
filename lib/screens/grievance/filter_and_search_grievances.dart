@@ -50,7 +50,7 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
           Map<String, dynamic> grievanceDetails =
               Map<String, dynamic>.from(userGrievances[grievanceKey]);
 
-          grievanceData[grievanceKey] = grievanceDetails;
+          grievanceData['$userId|$grievanceKey'] = grievanceDetails;
         }
       }
 
@@ -60,7 +60,6 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
         showNoGrievanceMessage = grievanceData.isEmpty;
       });
     } else {
-      // Set the flag here when no data is available
       setState(() {
         isLoading = false;
         dataAvailable = false;
@@ -133,9 +132,9 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
                         child: ListView.builder(
                           itemCount: grievanceData.length,
                           itemBuilder: (context, index) {
-                            var grievanceKey =
+                            var combinedKey =
                                 grievanceData.keys.elementAt(index);
-                            var grievanceDetails = grievanceData[grievanceKey];
+                            var grievanceDetails = grievanceData[combinedKey];
 
                             if ((selectedStatus == 'All' ||
                                     grievanceDetails['status'].toLowerCase() ==
@@ -150,7 +149,7 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
                                         .contains(searchController.text
                                             .toLowerCase()))) {
                               return buildGrievanceCard(
-                                grievanceKey,
+                                combinedKey,
                                 grievanceDetails['title'],
                                 grievanceDetails['description'],
                                 grievanceDetails['category'],
@@ -286,7 +285,7 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
   }
 
   Widget buildGrievanceCard(
-    String grievanceKey,
+    String combinedKey,
     String title,
     String description,
     String category,
@@ -295,6 +294,9 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
     String status,
   ) {
     Color statusColor = _getStatusColor(status);
+
+    bool showEditButton = status.toLowerCase() != 'rejected' &&
+        status.toLowerCase() != 'affected';
 
     return Card(
       elevation: 4,
@@ -402,58 +404,156 @@ class _FilterAndSearchGrievancesState extends State<FilterAndSearchGrievances> {
               ),
             ],
             SizedBox(height: 16),
-            Row(
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit),
-                  label: Text('Edit'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    onPrimary: Colors.white,
+            if (showEditButton)
+              Row(
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      _editStatus(combinedKey, status);
+                    },
+                    icon: Icon(Icons.edit),
+                    label: Text('Edit Status'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                    ),
                   ),
-                ),
-                Spacer(),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Confirm Deletion"),
-                          content: Text(
-                              "Are you sure you want to delete this grievance?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Yes"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  icon: Icon(Icons.delete),
-                  label: Text('Delete'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    onPrimary: Colors.white,
+                  Spacer(),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Confirm Deletion"),
+                            content: Text(
+                                "Are you sure you want to delete this grievance?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  _deleteGrievance(combinedKey);
+                                },
+                                child: Text("Yes"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.delete),
+                    label: Text('Delete'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      onPrimary: Colors.white,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),
     );
+  }
+
+  void _editStatus(String combinedKey, String currentStatus) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String newStatus = currentStatus ?? '';
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Edit Status"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<String>(
+                    value: newStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        newStatus = value;
+                      });
+                    },
+                    items: [
+                      'Under Process',
+                      'Rejected',
+                      'Approved',
+                      'Affected',
+                      'New Complaint'
+                    ].map<DropdownMenuItem<String>>(
+                      (String status) {
+                        return DropdownMenuItem<String>(
+                          key: UniqueKey(),
+                          value: status,
+                          child: Text(status),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _updateStatus(combinedKey, newStatus);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Save"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _updateStatus(String combinedKey, String newStatus) {
+    List<String> keyParts = combinedKey.split('|');
+    String userId = keyParts[0];
+    String grievanceKey = keyParts[1];
+
+    DatabaseReference grievanceRef =
+        _reference.child(userId).child(grievanceKey);
+
+    grievanceRef.update({
+      'status': newStatus,
+    }).then((_) {
+      print('Grievance status updated successfully!');
+      _fetchData();
+    }).catchError((error) {
+      print('Error updating grievance status: $error');
+    });
+  }
+
+  void _deleteGrievance(String combinedKey) {
+    List<String> keyParts = combinedKey.split('|');
+    String userId = keyParts[0];
+    String grievanceKey = keyParts[1];
+
+    DatabaseReference grievanceRef =
+        _reference.child(userId).child(grievanceKey);
+
+    grievanceRef.remove().then((_) {
+      print('Grievance deleted successfully!');
+      _fetchData();
+    }).catchError((error) {
+      print('Error deleting grievance: $error');
+    });
   }
 
   Color _getStatusColor(String status) {
