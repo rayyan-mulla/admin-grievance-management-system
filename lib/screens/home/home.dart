@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Admin Panel'),
+          title: Text('Admin Console'),
           backgroundColor: Colors.lightBlueAccent[700],
         ),
         backgroundColor: Colors.white,
