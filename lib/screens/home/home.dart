@@ -13,7 +13,6 @@ class _HomeState extends State<Home> {
 
   final tabs = [
     QuickStats(),
-    UpdateGrievanceStatus(),
     FilterAndSearchGrievances(),
     Profile(),
   ];
@@ -42,11 +41,6 @@ class _HomeState extends State<Home> {
               backgroundColor: Colors.lightBlueAccent[700],
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.assignment_turned_in),
-              title: Text("Update Status"),
-              backgroundColor: Colors.lightBlueAccent[700],
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.search),
               title: Text("Filter/Search"),
               backgroundColor: Colors.lightBlueAccent[700],
@@ -64,15 +58,6 @@ class _HomeState extends State<Home> {
           },
         ),
       ),
-    );
-  }
-}
-
-class UpdateGrievanceStatus extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Update Grievance Status"),
     );
   }
 }
