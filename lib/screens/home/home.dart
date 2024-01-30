@@ -41,8 +41,8 @@ class _HomeState extends State<Home> {
               backgroundColor: Colors.lightBlueAccent[700],
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text("Filter/Search"),
+              icon: Icon(Icons.apps_rounded),
+              title: Text("Grievance Dashboard"),
               backgroundColor: Colors.lightBlueAccent[700],
             ),
             BottomNavigationBarItem(
